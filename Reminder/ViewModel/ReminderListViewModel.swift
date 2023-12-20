@@ -42,6 +42,7 @@ protocol ReminderListProtocol {
         }
         var updateReminder = reminders[index]
         updateReminder.alarmDetail = update
+        updateReminder.updatedAt = Date()
         reminders[index] = updateReminder
     }
     
@@ -56,7 +57,7 @@ protocol ReminderListProtocol {
     // TODO: Change the loading to local peristed data
     func loadReminders() async {
         for index in 0..<10  {
-            add(reminder: Reminder(title: "Sample Reminder \(index+1)", state: .todo))
+            add(reminder: Reminder(title: "Sample Reminder \(index+1)", state: .todo, updatedAt: Date()))
         }
     }
 }

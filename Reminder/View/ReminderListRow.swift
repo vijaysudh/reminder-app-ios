@@ -92,6 +92,7 @@ private extension ReminderListRow {
             updatedReminder.title = reminderText
             updatedReminder.note = reminderNote
             updatedReminder.remindOnDate = remindOnDate
+            updatedReminder.updatedAt = Date()
             viewModel.updateReminder(forId: reminder.id, withUpdate: updatedReminder)
         }
     }
@@ -120,13 +121,14 @@ private extension ReminderListRow {
         }
         var updatedReminder = reminder
         updatedReminder.state = state
+        updatedReminder.updatedAt = Date()
         viewModel.updateReminder(forId: reminder.id, withUpdate: updatedReminder)
         setReminderImage(forState: state)
     }
 }
 
 struct ReminderListRow_Previews: PreviewProvider {
-    static let reminder = Reminder(title: "Sample Reminder", state: .todo, note: "Note")
+    static let reminder = Reminder(title: "Sample Reminder", state: .todo, note: "Note", updatedAt: Date())
     static var previews: some View {
         ReminderListRow(reminderId: reminder.id)
             .environment(ReminderListViewModel())

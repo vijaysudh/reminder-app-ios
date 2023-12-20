@@ -37,10 +37,18 @@ extension LocalNotificationError: LocalizedError {
     }
 }
 
-class LocalNotificationManager {
+class LocalNotificationManager: NSObject, UNUserNotificationCenterDelegate {
+    static let shared = LocalNotificationManager()
+    let notificationCenter = UNUserNotificationCenter.current()
+    let notificationName = Notification.Name("ReminderAlarm")
+    
+    private override init() {
+        super.init()
+        notificationCenter.delegate = self
+    }
+    
     func requestPermissionFromUser() {
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+        notificationCenter.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
             if granted {
                 print("Authorized local notification")
             } else {
@@ -64,12 +72,12 @@ class LocalNotificationManager {
         }
     }
         
-    func scheduleNotification(title: String, body: String?, remindAt: Date, completion: @escaping (Result<UUID, Error>) -> Void) {
+    func scheduleNotification(title: String, body: String?, remindAt: Date, userInfo: [String: String], completion: @escaping (Result<UUID, Error>) -> Void) {
         authorizationStatus { result in
             switch result {
             case .success(let status):
                 if status == .authorized {
-                    self.sendNotification(title: title, body: body, remindAt: remindAt) { notificationResult in
+                    self.sendNotification(title: title, body: body, remindAt: remindAt, userInfo: userInfo) { notificationResult in
                         switch notificationResult {
                             case .success(let notificationId): 
                                 completion(.success(notificationId))
@@ -84,11 +92,34 @@ class LocalNotificationManager {
             }
         }
     }
+    
+    func clearDeliveredNotifications() {
+        notificationCenter.removeAllDeliveredNotifications()
+    }
+    
+    /** Handle notification when the app is in background */
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response:
+    UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let content = response.notification.request.content
+        // handle the notification here
+        NotificationCenter.default.post(name:notificationName , object: content)
+    }
+    
+    /** Handle notification when the app is in foreground */
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+             willPresent notification: UNNotification,
+             withCompletionHandler completionHandler:
+                @escaping (UNNotificationPresentationOptions) -> Void) {
+       
+        let content = notification.request.content
+        // handle the notification here
+        NotificationCenter.default.post(name:notificationName , object: content)
+    }
 }
 
 private extension LocalNotificationManager {
     private func authorizationStatus(completion: @escaping (Result<NotificationAuthorization, Error>) -> Void) {
-        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+        notificationCenter.getNotificationSettings { (settings) in
             switch settings.authorizationStatus {
             case .notDetermined:
                 // ask user for permission
@@ -112,22 +143,22 @@ private extension LocalNotificationManager {
         }
     }
     
-    private func sendNotification(title: String, body: String?, remindAt: Date, completion: @escaping (Result<UUID, Error>) -> Void) {
+    private func sendNotification(title: String, body: String?, remindAt: Date, userInfo: [String: String], completion: @escaping (Result<UUID, Error>) -> Void) {
         let timeInterval = remindAt - Date()
         guard timeInterval > 0 else {
             completion(.failure(LocalNotificationError.invalidDate(date: remindAt)))
             return
         }
         
-        let center = UNUserNotificationCenter.current()
-        
         // TODO: Remove temp code once Local Peristance storage has been added
-        center.removeAllPendingNotificationRequests()
+        notificationCenter.removeAllPendingNotificationRequests()
         
         let content = UNMutableNotificationContent()
         content.categoryIdentifier = "Reminder"
         content.sound = UNNotificationSound.default
         content.title = title
+        content.userInfo = userInfo
+        
         if let body = body {
             content.body = body
         }
@@ -138,7 +169,7 @@ private extension LocalNotificationManager {
         // Create the notification request
         let request = UNNotificationRequest(identifier: identifier.uuidString, content: content, trigger: trigger)
         // Schedule the notification
-        center.add(request) { (error) in
+        notificationCenter.add(request) { (error) in
             if let error = error {
                 completion(.failure(LocalNotificationError.creation))
                 print("Error scheduling notification: \(error.localizedDescription)")

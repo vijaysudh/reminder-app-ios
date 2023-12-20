@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DC22CBC32B33A00100DCE4DC /* ReminderCategoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC22CBC22B33A00100DCE4DC /* ReminderCategoryList.swift */; };
 		DCDBE52D2B2E507D00C96351 /* ReminderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCDBE52C2B2E507D00C96351 /* ReminderApp.swift */; };
 		DCDBE5312B2E507F00C96351 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCDBE5302B2E507F00C96351 /* Assets.xcassets */; };
 		DCDBE5342B2E507F00C96351 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCDBE5332B2E507F00C96351 /* Preview Assets.xcassets */; };
@@ -50,6 +51,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DC22CBC22B33A00100DCE4DC /* ReminderCategoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCategoryList.swift; sourceTree = "<group>"; };
 		DCDBE5292B2E507D00C96351 /* Reminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCDBE52C2B2E507D00C96351 /* ReminderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderApp.swift; sourceTree = "<group>"; };
 		DCDBE5302B2E507F00C96351 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				DCDBE55C2B2E54E500C96351 /* Reminder.swift */,
+				DC22CBC22B33A00100DCE4DC /* ReminderCategoryList.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -366,6 +369,7 @@
 				DCDBE57F2B30BB8800C96351 /* EditReminderView.swift in Sources */,
 				DCDBE55D2B2E54E500C96351 /* Reminder.swift in Sources */,
 				DCDBE57B2B2F999F00C96351 /* ReminderTextField.swift in Sources */,
+				DC22CBC32B33A00100DCE4DC /* ReminderCategoryList.swift in Sources */,
 				DCDBE5792B2F8CB700C96351 /* ReminderStateButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

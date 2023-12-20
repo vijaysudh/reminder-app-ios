@@ -47,14 +47,15 @@ extension EditReminderView {
             return
         }
         var updatedReminder = reminder
-        updatedReminder.id = UUID() // Setting the Id to have the list refreshed
         updatedReminder.title = title
         updatedReminder.note = !note.isEmpty ? note : nil
         updatedReminder.isAlarmRequired = isAlarmRequired
         updatedReminder.remindOnDate = isAlarmRequired ? date : nil
+        updatedReminder.updatedAt = Date()
         viewModel.updateReminder(forId: reminderId, withUpdate: updatedReminder)
         if isAlarmRequired {
-            LocalNotificationManager().scheduleNotification(title: title, body: note, remindAt: date) { result in
+            let userInfo = ["reminderId": reminder.id.uuidString]
+            LocalNotificationManager.shared.scheduleNotification(title: title, body: note, remindAt: date, userInfo: userInfo) { result in
                 switch result {
                 case .success(let notificationId):
                     DispatchQueue.main.async {

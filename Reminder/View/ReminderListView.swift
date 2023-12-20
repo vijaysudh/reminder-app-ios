@@ -12,7 +12,7 @@ struct ReminderListView: View {
     @State private var isAddReminderSheetDisplayed = false
     var body: some View {
         VStack(alignment: .leading) {
-            List(viewModel.getAllReminders()) { reminder in
+            List(viewModel.getAllReminders(), id: \.updatedAt) { reminder in
                 ReminderListRow(reminderId: reminder.id).environment(viewModel)
                     .listSectionSeparator(.hidden, edges: [.top, .bottom])
             }

@@ -92,7 +92,7 @@ struct ReminderDetailView: View {
 
 private extension ReminderDetailView {
     func checkLocalNotificationAuthorization() {
-        LocalNotificationManager().checkAuthorization { result in
+        LocalNotificationManager.shared.checkAuthorization { result in
             switch result {
             case .success(_):
                 shouldDisplayDatePicker = true

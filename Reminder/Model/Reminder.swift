@@ -23,18 +23,20 @@ enum ReminderState: String, Codable {
     }
 }
 
-struct Reminder: Identifiable, Hashable {
+struct Reminder: Identifiable, Hashable, Codable {
     var id: UUID = UUID()
+    var reminderListId: UUID = UUID() // TODO: Temporary until the list view is ready
     var title: String
     var state: ReminderState
     var note: String?
     var remindOnDate: Date?
     var isAlarmRequired: Bool = false
     var alarmDetail: AlarmDetail?
+    var updatedAt = Date()
 }
 
 // Structure to track reminder notifications created when alarm is required
-struct AlarmDetail: Identifiable, Hashable {
+struct AlarmDetail: Identifiable, Hashable, Codable {
     var id: UUID
     var reminderId: UUID
 }

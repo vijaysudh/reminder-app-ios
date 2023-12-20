@@ -36,11 +36,11 @@ private extension AddReminderView {
     func addReminder() {
         let note = !note.isEmpty ? note : nil
         let date = isAlarmRequired ? date : nil
-        let reminder = Reminder(title: title, state: .todo, note: note, remindOnDate: date, isAlarmRequired: isAlarmRequired)
+        let reminder = Reminder(title: title, state: .todo, note: note, remindOnDate: date, isAlarmRequired: isAlarmRequired, updatedAt: Date())
         viewModel.add(reminder: reminder)
-        
         if let date = date, isAlarmRequired {
-            LocalNotificationManager().scheduleNotification(title: title, body: note, remindAt: date) { result in
+            let userInfo = ["reminderId": reminder.id.uuidString]
+            LocalNotificationManager.shared.scheduleNotification(title: title, body: note, remindAt: date, userInfo: userInfo) { result in
                 switch result {
                 case .success(let notificationId):
                     DispatchQueue.main.async {
