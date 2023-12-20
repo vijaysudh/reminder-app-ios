@@ -54,7 +54,17 @@ extension EditReminderView {
         updatedReminder.remindOnDate = isAlarmRequired ? date : nil
         viewModel.updateReminder(forId: reminderId, withUpdate: updatedReminder)
         if isAlarmRequired {
-            ReminderNotification().scheduleNotification(title: title, body: note, remindAt: date)
+            LocalNotificationManager().scheduleNotification(title: title, body: note, remindAt: date) { result in
+                switch result {
+                case .success(let notificationId):
+                    DispatchQueue.main.async {
+                        let alarmDetail = AlarmDetail(id: notificationId, reminderId: updatedReminder.id)
+                        self.viewModel.updateAlarmDetail(forId: updatedReminder.id, withUpdate: alarmDetail)
+                    }
+                case .failure(let error):
+                    let _ = print("editReminder - error: ", error.localizedDescription)
+                }
+            }
         }
         dismiss()
     }

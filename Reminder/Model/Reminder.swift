@@ -30,5 +30,12 @@ struct Reminder: Identifiable, Hashable {
     var note: String?
     var remindOnDate: Date?
     var isAlarmRequired: Bool = false
+    var alarmDetail: AlarmDetail?
+}
+
+// Structure to track reminder notifications created when alarm is required
+struct AlarmDetail: Identifiable, Hashable {
+    var id: UUID
+    var reminderId: UUID
 }
 

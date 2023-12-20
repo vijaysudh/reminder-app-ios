@@ -14,6 +14,8 @@ struct ReminderDetailView: View {
     @FocusState private var focus: FocusedField?
     @Environment(\.dismiss) var dismiss
     @Binding var isAlarmRequired: Bool
+    @State var shouldDisplayDatePicker: Bool = false
+    @State private var showAlert = false
     
     let header: String
     let action: () -> Void
@@ -37,7 +39,23 @@ struct ReminderDetailView: View {
                         .focused($focus, equals: .note)
                     
                     Toggle("Set Alarm", isOn: $isAlarmRequired)
-                    if(isAlarmRequired) {
+                        .onChange(of: isAlarmRequired) {_, newValue in
+                            if newValue {
+                                checkLocalNotificationAuthorization()
+                            }
+                        }
+                        .alert("Notification Settings", isPresented: $showAlert) {
+                            Button("Settings", role: .destructive) {
+                                openAppSettings()
+                            }
+                            Button("Cancel", role: .cancel) {
+                                 isAlarmRequired = false
+                            }
+                        } message: {
+                            Text("Notification settings needs to be turned on to set reminders")
+                        }
+                        
+                    if shouldDisplayDatePicker && isAlarmRequired {
                         DatePicker(selection: $date,
                                    label: {
                             Image(systemName: "calendar")
@@ -72,12 +90,40 @@ struct ReminderDetailView: View {
     }
 }
 
+private extension ReminderDetailView {
+    func checkLocalNotificationAuthorization() {
+        LocalNotificationManager().checkAuthorization { result in
+            switch result {
+            case .success(_):
+                shouldDisplayDatePicker = true
+            case .failure(_):
+                shouldDisplayDatePicker = false
+                showAlert = true
+            }
+        }
+    }
+    
+    func openAppSettings() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+        if UIApplication.shared.canOpenURL(settingsURL) {
+            UIApplication.shared.open(settingsURL, options: [:]) { success in
+                if success {
+                    print("Opened Notification Settings successfully.")
+                } else {
+                    print("Failed to open Notification Settings.")
+                }
+            }
+        }
+    }
+}
+
 struct ReminderDetailView_Preview: PreviewProvider {
     static var previews: some View {
         @State var title: String = "Reminder title"
         @State var note: String = "Some note"
         @State var date: Date = Date()
         @State var isAlarmRequired: Bool = false
+        
         ReminderDetailView(title: $title,
                            note: $note,
                            date: $date,

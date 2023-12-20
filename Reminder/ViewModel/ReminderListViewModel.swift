@@ -36,6 +36,15 @@ protocol ReminderListProtocol {
         reminders[index] = update
     }
     
+    func updateAlarmDetail(forId id: UUID, withUpdate update: AlarmDetail) {
+        guard let index = reminders.firstIndex(where: { $0.id == id }) else {
+            return
+        }
+        var updateReminder = reminders[index]
+        updateReminder.alarmDetail = update
+        reminders[index] = updateReminder
+    }
+    
     func getAllReminders() -> [Reminder] {
         return reminders
     }

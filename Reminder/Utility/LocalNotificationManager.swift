@@ -7,15 +7,23 @@
 
 import UIKit
 
-enum ReminderNotificationError: Error {
-    case unauthorized
+enum NotificationAuthorization {
+    case authorized
+    case requestAuthorization
+    case denied
+}
+
+enum LocalNotificationError: Error {
+    case denined
     case invalidDate(date: Date)
     case creation
-    
-    var description: String {
+}
+
+extension LocalNotificationError: LocalizedError {
+    var errorDescription: String? {
         switch self {
-        case .unauthorized:
-            return "Reminder app is unauthorized to create a notification"
+        case .denined:
+            return "Reminder app notification settings is disabled"
         case .invalidDate(let date):
             let dateFormatter = DateFormatter()
             dateFormatter.dateStyle = .short
@@ -30,11 +38,84 @@ enum ReminderNotificationError: Error {
 }
 
 class LocalNotificationManager {
+    func requestPermissionFromUser() {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+            if granted {
+                print("Authorized local notification")
+            } else {
+                print("Authorization error: ", error?.localizedDescription ?? "Not granted")
+            }
+        }
+    }
+    
+    func checkAuthorization(completion: @escaping (Result<Bool, Error>) -> Void) {
+        authorizationStatus { result in
+            switch result {
+            case .success(let status):
+                if status == .requestAuthorization {
+                    self.requestPermissionFromUser()
+                }
+                completion(.success(true))
+            case .failure(let error):
+                print("CheckAuthorization Auth Error: ", error.localizedDescription)
+                completion(.failure(error))
+            }
+        }
+    }
+        
     func scheduleNotification(title: String, body: String?, remindAt: Date, completion: @escaping (Result<UUID, Error>) -> Void) {
-        registerLocal()
+        authorizationStatus { result in
+            switch result {
+            case .success(let status):
+                if status == .authorized {
+                    self.sendNotification(title: title, body: body, remindAt: remindAt) { notificationResult in
+                        switch notificationResult {
+                            case .success(let notificationId): 
+                                completion(.success(notificationId))
+                            case .failure(let error): 
+                                completion(.failure(error))
+                        }
+                    }
+                }
+            case .failure(let error):
+                print("LocalNotificationManager Auth Error: ", error.localizedDescription)
+                completion(.failure(error))
+            }
+        }
+    }
+}
+
+private extension LocalNotificationManager {
+    private func authorizationStatus(completion: @escaping (Result<NotificationAuthorization, Error>) -> Void) {
+        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+            switch settings.authorizationStatus {
+            case .notDetermined:
+                // ask user for permission
+                completion(.success(.requestAuthorization))
+            case .authorized:
+                // Authorized
+                completion(.success(.authorized))
+            case .provisional:
+                // Authorized
+                completion(.success(.authorized))
+            case .ephemeral:
+                // Not required to be handled
+                completion(.success(.authorized))
+            case .denied:
+                // Disaplay an alert to the user to change their settings
+                completion(.failure(LocalNotificationError.denined))
+            @unknown default:
+                // Treat it the same as denined
+                completion(.failure(LocalNotificationError.denined))
+            }
+        }
+    }
+    
+    private func sendNotification(title: String, body: String?, remindAt: Date, completion: @escaping (Result<UUID, Error>) -> Void) {
         let timeInterval = remindAt - Date()
         guard timeInterval > 0 else {
-            completion(.failure(ReminderNotificationError.invalidDate(date: remindAt)))
+            completion(.failure(LocalNotificationError.invalidDate(date: remindAt)))
             return
         }
         
@@ -59,48 +140,11 @@ class LocalNotificationManager {
         // Schedule the notification
         center.add(request) { (error) in
             if let error = error {
+                completion(.failure(LocalNotificationError.creation))
                 print("Error scheduling notification: \(error.localizedDescription)")
-                completion(.failure(ReminderNotificationError.creation))
             } else {
-                print("Notification scheduled successfully!")
                 completion(.success(identifier))
-            }
-        }
-    }
-}
-
-private extension LocalNotificationManager {
-    //@objc
-    private func isAuthorized(completion: @escaping (Result<Bool, Error>) -> Void) {
-        let center = UNUserNotificationCenter.current()
-        center.getNotificationSettings { (settings) in
-            if settings.authorizationStatus == .authorized {
-                completion(.success(true))
-            } else {
-                completion(.failure(ReminderNotificationError.unauthorized))
-            }
-        }
-    }
-    
-    private func requestPermissionFromUser() {
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-            if granted {
-                print("Authorized local notification")
-            } else {
-                print("Authorization error: ", error?.localizedDescription ?? "NA")
-            }
-        }
-    }
-    
-    //@objc
-    private func registerLocal() {
-        isAuthorized { result in
-            switch result {
-            case .success(_):
-                return
-            case .failure(let error):
-                self.requestPermissionFromUser()
+                print("Notification scheduled successfully!")
             }
         }
     }

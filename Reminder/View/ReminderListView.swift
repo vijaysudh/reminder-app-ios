@@ -14,6 +14,7 @@ struct ReminderListView: View {
         VStack(alignment: .leading) {
             List(viewModel.getAllReminders()) { reminder in
                 ReminderListRow(reminderId: reminder.id).environment(viewModel)
+                    .listSectionSeparator(.hidden, edges: [.top, .bottom])
             }
             .listStyle(.plain)
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)

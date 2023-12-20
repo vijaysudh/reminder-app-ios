@@ -29,10 +29,13 @@ struct ReminderListRow: View {
                                   isFocused: $isReminderFocused, placeholderText: "",
                                   textColor: Color.black,
                                   fontSize: 17,
-                                  onAppear: reminderTextOnAppear, 
+                                  onAppear: reminderTextOnAppear,
                                   onSubmit: updateReminder)
-                
-                if let note = getReminder()?.note, (!note.isEmpty || isReminderFocused || isNoteFocused) {
+                .alignmentGuide(.listRowSeparatorLeading) {
+                    $0[.leading]
+                }
+                let note = getReminder()?.note ?? ""
+                if !note.isEmpty || isReminderFocused || isNoteFocused {
                     ReminderTextField(text: $reminderNote,
                                       isFocused: $isNoteFocused,
                                       placeholderText: "Add note",

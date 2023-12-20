@@ -38,8 +38,19 @@ private extension AddReminderView {
         let date = isAlarmRequired ? date : nil
         let reminder = Reminder(title: title, state: .todo, note: note, remindOnDate: date, isAlarmRequired: isAlarmRequired)
         viewModel.add(reminder: reminder)
+        
         if let date = date, isAlarmRequired {
-            ReminderNotification().scheduleNotification(title: title, body: note, remindAt: date)
+            LocalNotificationManager().scheduleNotification(title: title, body: note, remindAt: date) { result in
+                switch result {
+                case .success(let notificationId):
+                    DispatchQueue.main.async {
+                        let alarmDetail = AlarmDetail(id: notificationId, reminderId: reminder.id)
+                        self.viewModel.updateAlarmDetail(forId: reminder.id, withUpdate: alarmDetail)
+                    }
+                case .failure(let error):
+                    let _ = print("editReminder - error: ", error.localizedDescription)
+                }
+            }
         }
         dismiss()
     }
