@@ -6,16 +6,25 @@
 //
 
 import Foundation
+import SwiftUI
+// ----
 
-protocol ReminderListProtocol {
+protocol ReminderListInterface {
+    // Create
     func add(reminder: Reminder)
-    func deleteReminder(id: UUID)
+    // Read
+    func loadReminders() async
     func getAllReminders() -> [Reminder]
     func getReminder(id: UUID) -> Reminder?
-    func loadReminders() async
+    // Update
+    func updateReminder(forId id: UUID, withUpdate update: Reminder)
+    func updateAlarmDetail(forId id: UUID, withUpdate update: AlarmDetail)
+    // Delete
+    func deleteReminder(id: UUID)
 }
 
-@Observable class ReminderListViewModel: ReminderListProtocol {
+@Observable class ReminderListViewModel: ReminderListInterface {
+    //var state: ViewState = .idle
     private var reminders: [Reminder] = [Reminder]()
     
     func add(reminder: Reminder) {

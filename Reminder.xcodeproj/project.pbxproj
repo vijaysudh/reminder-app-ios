@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		DC22CBC32B33A00100DCE4DC /* ReminderCategoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC22CBC22B33A00100DCE4DC /* ReminderCategoryList.swift */; };
+		DC22CBC52B33A75500DCE4DC /* ReminderListCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC22CBC42B33A75500DCE4DC /* ReminderListCategoryView.swift */; };
+		DC22CBC72B33A91B00DCE4DC /* ReminderCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC22CBC62B33A91B00DCE4DC /* ReminderCategoryViewModel.swift */; };
+		DC22CBCB2B33E2CA00DCE4DC /* ReminderListViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC22CBCA2B33E2CA00DCE4DC /* ReminderListViewModelFactory.swift */; };
+		DC5D613E2B34B2750031AC67 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5D613D2B34B2750031AC67 /* ViewState.swift */; };
 		DCDBE52D2B2E507D00C96351 /* ReminderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCDBE52C2B2E507D00C96351 /* ReminderApp.swift */; };
 		DCDBE5312B2E507F00C96351 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCDBE5302B2E507F00C96351 /* Assets.xcassets */; };
 		DCDBE5342B2E507F00C96351 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCDBE5332B2E507F00C96351 /* Preview Assets.xcassets */; };
@@ -52,6 +56,10 @@
 
 /* Begin PBXFileReference section */
 		DC22CBC22B33A00100DCE4DC /* ReminderCategoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCategoryList.swift; sourceTree = "<group>"; };
+		DC22CBC42B33A75500DCE4DC /* ReminderListCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderListCategoryView.swift; sourceTree = "<group>"; };
+		DC22CBC62B33A91B00DCE4DC /* ReminderCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCategoryViewModel.swift; sourceTree = "<group>"; };
+		DC22CBCA2B33E2CA00DCE4DC /* ReminderListViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderListViewModelFactory.swift; sourceTree = "<group>"; };
+		DC5D613D2B34B2750031AC67 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
 		DCDBE5292B2E507D00C96351 /* Reminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCDBE52C2B2E507D00C96351 /* ReminderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderApp.swift; sourceTree = "<group>"; };
 		DCDBE5302B2E507F00C96351 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -187,6 +195,7 @@
 				DCDBE56F2B2F7F2600C96351 /* ReminderListRow.swift */,
 				DCDBE5592B2E50FE00C96351 /* ReminderListView.swift */,
 				DCDBE5662B2E9CB900C96351 /* ReminderListContentView.swift */,
+				DC22CBC42B33A75500DCE4DC /* ReminderListCategoryView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -194,7 +203,9 @@
 		DCDBE55B2B2E528D00C96351 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				DC22CBCA2B33E2CA00DCE4DC /* ReminderListViewModelFactory.swift */,
 				DCDBE5602B2E5A7A00C96351 /* ReminderListViewModel.swift */,
+				DC22CBC62B33A91B00DCE4DC /* ReminderCategoryViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -222,6 +233,7 @@
 			children = (
 				DCF415432B30F81F00042CEA /* LocalNotificationManager.swift */,
 				DCF415452B316EC500042CEA /* Date+Extension.swift */,
+				DC5D613D2B34B2750031AC67 /* ViewState.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -357,9 +369,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				DCDBE5752B2F811300C96351 /* AddReminderButton.swift in Sources */,
+				DC22CBC72B33A91B00DCE4DC /* ReminderCategoryViewModel.swift in Sources */,
+				DC5D613E2B34B2750031AC67 /* ViewState.swift in Sources */,
+				DC22CBCB2B33E2CA00DCE4DC /* ReminderListViewModelFactory.swift in Sources */,
 				DCDBE5672B2E9CB900C96351 /* ReminderListContentView.swift in Sources */,
 				DCF415442B30F81F00042CEA /* LocalNotificationManager.swift in Sources */,
 				DCDBE56B2B2EA1A500C96351 /* AddReminderView.swift in Sources */,
+				DC22CBC52B33A75500DCE4DC /* ReminderListCategoryView.swift in Sources */,
 				DCDBE57D2B30BA5400C96351 /* ReminderDetailView.swift in Sources */,
 				DCF415462B316EC500042CEA /* Date+Extension.swift in Sources */,
 				DCDBE5702B2F7F2600C96351 /* ReminderListRow.swift in Sources */,

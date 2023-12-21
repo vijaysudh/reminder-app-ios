@@ -47,6 +47,7 @@ extension EditReminderView {
             return
         }
         var updatedReminder = reminder
+        updatedReminder.id = UUID()
         updatedReminder.title = title
         updatedReminder.note = !note.isEmpty ? note : nil
         updatedReminder.isAlarmRequired = isAlarmRequired
@@ -74,6 +75,6 @@ extension EditReminderView {
 struct EditReminderView_Preview: PreviewProvider {
     static let isAlarmRequired = false
     static var previews: some View {
-        EditReminderView(reminderId: UUID()).environment(ReminderListViewModel())
+        EditReminderView(reminderId: UUID()).environment(ReminderListViewModelFactory().createModel())
     }
 }

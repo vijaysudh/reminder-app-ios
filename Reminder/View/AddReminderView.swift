@@ -59,5 +59,5 @@ private extension AddReminderView {
 
 
 #Preview {
-    AddReminderView().environment(ReminderListViewModel())
+    AddReminderView().environment(ReminderListViewModelFactory().createModel())
 }

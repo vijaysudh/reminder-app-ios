@@ -10,6 +10,7 @@ import SwiftUI
 struct ReminderTextField: View {
     @Binding var text: String
     @Binding var isFocused: Bool
+    @Binding var isCompleted: Bool
     @FocusState private var focusState: Bool
     
     var placeholderText: String
@@ -27,6 +28,7 @@ struct ReminderTextField: View {
             .foregroundColor(textColor)
             .disableAutocorrection(true)
             .focused($focusState)
+            .strikethrough(isCompleted)
             .onAppear(perform: {
                 (onAppear ?? {})()
             })
@@ -51,8 +53,10 @@ struct ReminderTextField_Preview: PreviewProvider {
     static var previews: some View {
         @State var text: String = "Sample text"
         @State var isFocused: Bool = false
-        ReminderTextField(text: $text, 
+        @State var isCompleted: Bool = true
+        ReminderTextField(text: $text,
                           isFocused: $isFocused,
+                          isCompleted: $isCompleted,
                           placeholderText: "",
                           textColor: Color.black, 
                           fontSize: 17.0,

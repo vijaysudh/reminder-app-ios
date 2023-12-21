@@ -10,4 +10,5 @@ import Foundation
 struct ReminderCategoryList: Identifiable, Hashable, Codable {
     var id: UUID = UUID()
     var name: String
+    var updatedAt: Date = Date()
 }

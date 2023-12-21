@@ -61,6 +61,7 @@ struct ReminderDetailView: View {
                             Image(systemName: "calendar")
                                 .resizable()
                                 .foregroundColor(Color.red)
+                                .font(Font.system(size: 60, weight: .light))
                                 .frame(width: 30, height: 30)
                                 .tint(Color.red)
                         })

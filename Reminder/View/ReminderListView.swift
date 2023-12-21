@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct ReminderListView: View {
-    @State var viewModel = ReminderListViewModel()
+    @State var viewModel: ReminderListViewModel
     @State private var isAddReminderSheetDisplayed = false
+    
     var body: some View {
         VStack(alignment: .leading) {
-            List(viewModel.getAllReminders(), id: \.updatedAt) { reminder in
+            //List(viewModel.getAllReminders(), id: \.updatedAt) { reminder in
+            List(viewModel.getAllReminders()) { reminder in
                 ReminderListRow(reminderId: reminder.id).environment(viewModel)
                     .listSectionSeparator(.hidden, edges: [.top, .bottom])
             }
@@ -35,6 +37,6 @@ struct ReminderListView: View {
 
 struct ReminderListView_Previews: PreviewProvider {
     static var previews: some View {
-        ReminderListView(viewModel: ReminderListViewModel())
+        ReminderListView(viewModel: ReminderListViewModelFactory().createModel())
     }
 }

@@ -16,6 +16,7 @@ struct ReminderStateButton: View  {
                label: {
             Image(systemName:stateImageName)
                 .resizable()
+                .font(Font.system(size: 60, weight: .light))
                 .frame(width: 25, height: 25)
                 .foregroundColor(.blue)
         }).buttonStyle(.borderless)

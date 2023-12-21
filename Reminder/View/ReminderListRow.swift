@@ -16,6 +16,7 @@ struct ReminderListRow: View {
     @State var isReminderFocused: Bool = false
     @State var isNoteFocused: Bool = false
     @State var stateImageName: String = "circle"
+    @State var isCompleted: Bool = false
     
     var reminderId: UUID
     
@@ -23,10 +24,11 @@ struct ReminderListRow: View {
         HStack(alignment: .top) {
             ReminderStateButton(action: updateReminderState, stateImageName: $stateImageName)
                 .padding([.leading], 10)
-            
             VStack(alignment: .leading) {
                 ReminderTextField(text: $reminderText,
-                                  isFocused: $isReminderFocused, placeholderText: "",
+                                  isFocused: $isReminderFocused, 
+                                  isCompleted: $isCompleted,
+                                  placeholderText: "",
                                   textColor: Color.black,
                                   fontSize: 17,
                                   onAppear: reminderTextOnAppear,
@@ -37,7 +39,8 @@ struct ReminderListRow: View {
                 let note = getReminder()?.note ?? ""
                 if !note.isEmpty || isReminderFocused || isNoteFocused {
                     ReminderTextField(text: $reminderNote,
-                                      isFocused: $isNoteFocused,
+                                      isFocused: $isNoteFocused, 
+                                      isCompleted: $isCompleted,
                                       placeholderText: "Add note",
                                       textColor: Color.gray,
                                       fontSize: 14,
@@ -53,6 +56,7 @@ struct ReminderListRow: View {
                 Image(systemName:"info.circle")
                     .resizable()
                     .frame(width: 25, height: 25)
+                    .font(Font.system(size: 60, weight: .light))
                     .foregroundColor(.blue)
             })
             .buttonStyle(.borderless)
@@ -116,8 +120,10 @@ private extension ReminderListRow {
         
         if reminder.state == .completed {
             state = .todo
+            isCompleted = false
         } else {
             state = .completed
+            isCompleted = true
         }
         var updatedReminder = reminder
         updatedReminder.state = state
@@ -131,6 +137,6 @@ struct ReminderListRow_Previews: PreviewProvider {
     static let reminder = Reminder(title: "Sample Reminder", state: .todo, note: "Note", updatedAt: Date())
     static var previews: some View {
         ReminderListRow(reminderId: reminder.id)
-            .environment(ReminderListViewModel())
+            .environment(ReminderListViewModelFactory().createModel())
     }
 }

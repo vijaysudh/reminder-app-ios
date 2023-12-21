@@ -25,7 +25,7 @@ enum ReminderState: String, Codable {
 
 struct Reminder: Identifiable, Hashable, Codable {
     var id: UUID = UUID()
-    var reminderListId: UUID = UUID() // TODO: Temporary until the list view is ready
+    var reminderListId: UUID = UUID(uuidString: "3469243d-5909-4703-a05c-0353ed59e060") ?? UUID() // TODO: Temporary until the list view is ready
     var title: String
     var state: ReminderState
     var note: String?

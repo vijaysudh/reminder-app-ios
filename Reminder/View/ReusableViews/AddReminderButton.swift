@@ -22,6 +22,7 @@ struct AddReminderButton<Destination>: View where Destination : View {
         }, label: {
             Image(systemName:"plus.circle.fill")
                 .resizable()
+                .font(Font.system(size: 60, weight: .light))
                 .frame(width: 25, height: 25)
                 .foregroundColor(.blue)
             Text("Add Reminder")
@@ -37,7 +38,7 @@ struct AddReminderButton<Destination>: View where Destination : View {
 
 struct AddReminderButton_Previews: PreviewProvider {
     static var previews: some View {
-        let view = { AddReminderView().environment(ReminderListViewModel()) }
+        let view = { AddReminderView().environment(ReminderListViewModelFactory().createModel()) }
         AddReminderButton(destination: view)
     }
 }
