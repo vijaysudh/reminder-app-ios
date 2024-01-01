@@ -24,8 +24,9 @@ struct ReminderTextField: View {
     var body: some View {
         TextField(placeholderText, text: $text, axis: .vertical)
             .font(.system(size: CGFloat(fontSize)))
+            .fontWeight(.light)
             .textInputAutocapitalization(.never)
-            .foregroundColor(textColor)
+            .foregroundColor(isCompleted ? Color.gray : textColor)
             .disableAutocorrection(true)
             .focused($focusState)
             .strikethrough(isCompleted)

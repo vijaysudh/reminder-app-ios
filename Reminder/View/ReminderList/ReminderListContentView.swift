@@ -17,7 +17,9 @@ struct ReminderListContentView<Factory: BaseReminderViewModelFactory>: View {
     
     var body: some View {
         NavigationStack {
-            ReminderListView(viewModel: viewModel).navigationTitle("Reminders")
+            ReminderListView(viewModel: viewModel)
+                .navigationTitle("Reminders")
+                .fontWeight(.light)
                 .onReceive(publisher) { data in
                     guard let notification = data.object as? UNNotificationContent else {
                         return
@@ -30,5 +32,5 @@ struct ReminderListContentView<Factory: BaseReminderViewModelFactory>: View {
 }
 
 #Preview {
-    ReminderListContentView(factory: ReminderListViewModelFactory())
+    ReminderListContentView(factory: ReminderListViewModelFactory(reminderCategoryId: UUID()))
 }

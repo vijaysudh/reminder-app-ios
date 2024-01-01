@@ -25,19 +25,23 @@ enum ReminderState: String, Codable {
 
 struct Reminder: Identifiable, Hashable, Codable {
     var id: UUID = UUID()
-    var reminderListId: UUID = UUID(uuidString: "3469243d-5909-4703-a05c-0353ed59e060") ?? UUID() // TODO: Temporary until the list view is ready
+    var reminderId: UUID = UUID()
+    var reminderListId: UUID
     var title: String
     var state: ReminderState
     var note: String?
     var remindOnDate: Date?
     var isAlarmRequired: Bool = false
     var alarmDetail: AlarmDetail?
-    var updatedAt = Date()
+    var createdAt: Date = Date()
+    var updatedAt: Date = Date()
 }
 
 // Structure to track reminder notifications created when alarm is required
 struct AlarmDetail: Identifiable, Hashable, Codable {
     var id: UUID
     var reminderId: UUID
+    var createdAt: Date = Date()
+    var updatedAt: Date = Date()
 }
 

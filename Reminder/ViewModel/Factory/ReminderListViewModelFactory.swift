@@ -9,13 +9,22 @@ import Foundation
 
 protocol BaseReminderViewModelFactory {
     associatedtype ViewModelType: ReminderListViewModel
+    var reminderCategoryId: UUID { get set }
     func createModel() -> ViewModelType
 }
 
 class ReminderListViewModelFactory: BaseReminderViewModelFactory {
     typealias ViewModelType = ReminderListViewModel
+    var reminderCategoryId: UUID
+    
+    init(reminderCategoryId: UUID) {
+        self.reminderCategoryId = reminderCategoryId
+    }
     
     func createModel() -> ReminderListViewModel {
-        return ReminderListViewModel()
+       print("ReminderListViewModelFactory: " + ApplicationConfiguration.sharedInstance.getApplicationConfig().environment.rawValue)
+        return ReminderListViewModel(reminderCategoryId: reminderCategoryId)
     }
 }
+
+

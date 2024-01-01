@@ -7,11 +7,17 @@
 
 import SwiftUI
 
+// Allows focus navigation in a form
+enum ReminderFocusedField: Hashable {
+    case name
+    case note
+}
+
 struct ReminderDetailView: View {
     @Binding var title: String
     @Binding var note: String
     @Binding var date: Date
-    @FocusState private var focus: FocusedField?
+    @FocusState private var focus: ReminderFocusedField?
     @Environment(\.dismiss) var dismiss
     @Binding var isAlarmRequired: Bool
     @State var shouldDisplayDatePicker: Bool = false
@@ -23,9 +29,10 @@ struct ReminderDetailView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("reminder")) {
+                Section(header: Text("Reminder")) {
                     TextField("Title", text: $title, axis: .vertical)
                         .font(.system(size: 16))
+                        .fontWeight(.light)
                         .textInputAutocapitalization(.never)
                         .disableAutocorrection(true)
                         .focused($focus, equals: .name)
@@ -34,6 +41,7 @@ struct ReminderDetailView: View {
                         }
                     TextField("Note", text: $note, axis: .vertical)
                         .font(.system(size: 16))
+                        .fontWeight(.light)
                         .textInputAutocapitalization(.never)
                         .disableAutocorrection(true)
                         .focused($focus, equals: .note)
@@ -44,6 +52,7 @@ struct ReminderDetailView: View {
                                 checkLocalNotificationAuthorization()
                             }
                         }
+                        .fontWeight(.light)
                         .alert("Notification Settings", isPresented: $showAlert) {
                             Button("Settings", role: .destructive) {
                                 openAppSettings()
@@ -53,6 +62,7 @@ struct ReminderDetailView: View {
                             }
                         } message: {
                             Text("Notification settings needs to be turned on to set reminders")
+                                .fontWeight(.light)
                         }
                         
                     if shouldDisplayDatePicker && isAlarmRequired {
@@ -64,9 +74,12 @@ struct ReminderDetailView: View {
                                 .font(Font.system(size: 60, weight: .light))
                                 .frame(width: 30, height: 30)
                                 .tint(Color.red)
-                        })
+                        }).fontWeight(.light)
                     }
-                }.onAppear {
+                }
+                .headerProminence(.increased)
+                .fontWeight(.medium)
+                .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                         focus = .name
                     }
@@ -78,12 +91,14 @@ struct ReminderDetailView: View {
                         Button(action: {
                             dismiss()
                         }, label: {
-                            Text("Cancel")
+                            Label("Close", systemImage: "xmark")
+                                .labelStyle(.iconOnly)
+                                .fontWeight(.light)
                         })
                     }
                     ToolbarItem(placement: .topBarTrailing) {
                         Button(action: action, label: {
-                            Text("Done")
+                            Text("Save").fontWeight(.medium)
                         })
                     }
                 }

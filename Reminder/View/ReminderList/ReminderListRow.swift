@@ -12,7 +12,7 @@ struct ReminderListRow: View {
     @State private var isEditReminderSheetDisplayed = false
     @State var reminderText: String = ""
     @State var reminderNote: String = ""
-    @State var remindOnDate: Date = Date()
+    //@State var remindOnDate: Date = Date()
     @State var isReminderFocused: Bool = false
     @State var isNoteFocused: Bool = false
     @State var stateImageName: String = "circle"
@@ -46,6 +46,16 @@ struct ReminderListRow: View {
                                       fontSize: 14,
                                       onAppear: reminderNoteOnAppear,
                                       onSubmit: updateReminder)
+                }
+                let date = getReminder()?.remindOnDate?.formatted(date: .abbreviated, time: .shortened) ?? ""
+                if !date.isEmpty {
+                    HStack {
+                        Image(systemName: "alarm").fontWeight(.light)
+                        Text(date)
+                            .foregroundColor(Color.gray)
+                            .font(.system(size: CGFloat(14)))
+                            .fontWeight(.light)
+                    }
                 }
             }
             
@@ -83,19 +93,12 @@ private extension ReminderListRow {
             reminderNote = note
         }
     }
-    
-    func reminderDateOnAppear() {
-        if let reminder = getReminder(), let date = reminder.remindOnDate {
-            remindOnDate = date
-        }
-    }
-    
+        
     func updateReminder() {
         if let reminder = getReminder() {
             var updatedReminder = reminder
             updatedReminder.title = reminderText
             updatedReminder.note = reminderNote
-            updatedReminder.remindOnDate = remindOnDate
             updatedReminder.updatedAt = Date()
             viewModel.updateReminder(forId: reminder.id, withUpdate: updatedReminder)
         }
@@ -134,9 +137,9 @@ private extension ReminderListRow {
 }
 
 struct ReminderListRow_Previews: PreviewProvider {
-    static let reminder = Reminder(title: "Sample Reminder", state: .todo, note: "Note", updatedAt: Date())
+    static let reminder = Reminder(reminderListId: UUID(), title: "Sample Reminder", state: .todo, note: "Note", updatedAt: Date())
     static var previews: some View {
         ReminderListRow(reminderId: reminder.id)
-            .environment(ReminderListViewModelFactory().createModel())
+            .environment(ReminderListViewModelFactory(reminderCategoryId: UUID()).createModel())
     }
 }

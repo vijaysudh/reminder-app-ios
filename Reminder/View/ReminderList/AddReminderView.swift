@@ -7,19 +7,13 @@
 
 import SwiftUI
 
-// Allows focus navigation in a form
-enum FocusedField: Hashable {
-    case name
-    case note
-}
-
 struct AddReminderView: View {
     @Environment(ReminderListViewModel.self) private var viewModel
     @State private var title: String = ""
     @State private var note: String = ""
     @State private var date = Date()
     @State private var isAlarmRequired: Bool = false
-    @FocusState private var focus: FocusedField?
+    @FocusState private var focus: ReminderFocusedField?
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -36,7 +30,7 @@ private extension AddReminderView {
     func addReminder() {
         let note = !note.isEmpty ? note : nil
         let date = isAlarmRequired ? date : nil
-        let reminder = Reminder(title: title, state: .todo, note: note, remindOnDate: date, isAlarmRequired: isAlarmRequired, updatedAt: Date())
+        let reminder = Reminder(reminderListId: viewModel.reminderCategoryId, title: title, state: .todo, note: note, remindOnDate: date, isAlarmRequired: isAlarmRequired, updatedAt: Date())
         viewModel.add(reminder: reminder)
         if let date = date, isAlarmRequired {
             let userInfo = ["reminderId": reminder.id.uuidString]
@@ -59,5 +53,5 @@ private extension AddReminderView {
 
 
 #Preview {
-    AddReminderView().environment(ReminderListViewModelFactory().createModel())
+    AddReminderView().environment(ReminderListViewModelFactory(reminderCategoryId: UUID()).createModel())
 }

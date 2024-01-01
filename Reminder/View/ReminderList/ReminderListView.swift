@@ -13,7 +13,6 @@ struct ReminderListView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            //List(viewModel.getAllReminders(), id: \.updatedAt) { reminder in
             List(viewModel.getAllReminders()) { reminder in
                 ReminderListRow(reminderId: reminder.id).environment(viewModel)
                     .listSectionSeparator(.hidden, edges: [.top, .bottom])
@@ -22,7 +21,7 @@ struct ReminderListView: View {
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
             Spacer()
             HStack(alignment: .top) {
-                AddReminderButton(isAddReminderSheetDisplayed: isAddReminderSheetDisplayed) {
+                AddButton(isSheetDisplayed: isAddReminderSheetDisplayed, title: "Add Reminder", iconName: "plus.circle") {
                     AddReminderView()
                         .environment(viewModel)
                 }
@@ -37,6 +36,6 @@ struct ReminderListView: View {
 
 struct ReminderListView_Previews: PreviewProvider {
     static var previews: some View {
-        ReminderListView(viewModel: ReminderListViewModelFactory().createModel())
+        ReminderListView(viewModel: ReminderListViewModelFactory(reminderCategoryId: UUID()).createModel())
     }
 }

@@ -13,7 +13,7 @@ struct EditReminderView: View {
     @State private var note: String = ""
     @State private var date = Date()
     @State private var isAlarmRequired: Bool = false
-    @FocusState private var focus: FocusedField?
+    @FocusState private var focus: ReminderFocusedField?
     @Environment(\.dismiss) var dismiss
     
     let reminderId: UUID
@@ -39,7 +39,6 @@ extension EditReminderView {
         note = reminder.note ?? ""
         isAlarmRequired = reminder.remindOnDate != nil ? true : false
         date = reminder.remindOnDate ?? Date()
-        
     }
     
     func editReminder() {
@@ -75,6 +74,6 @@ extension EditReminderView {
 struct EditReminderView_Preview: PreviewProvider {
     static let isAlarmRequired = false
     static var previews: some View {
-        EditReminderView(reminderId: UUID()).environment(ReminderListViewModelFactory().createModel())
+        EditReminderView(reminderId: UUID()).environment(ReminderListViewModelFactory(reminderCategoryId: UUID()).createModel())
     }
 }

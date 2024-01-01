@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
-// ----
 
 protocol ReminderListInterface {
     // Create
@@ -25,7 +23,13 @@ protocol ReminderListInterface {
 
 @Observable class ReminderListViewModel: ReminderListInterface {
     //var state: ViewState = .idle
+    var reminderCategoryId: UUID
+        
     private var reminders: [Reminder] = [Reminder]()
+    
+    init(reminderCategoryId: UUID) {
+        self.reminderCategoryId = reminderCategoryId
+    }
     
     func add(reminder: Reminder) {
         reminders.append(reminder)
@@ -56,7 +60,7 @@ protocol ReminderListInterface {
     }
     
     func getAllReminders() -> [Reminder] {
-        return reminders
+        return reminders.filter { $0.reminderListId == reminderCategoryId }
     }
     
     func getReminder(id: UUID) -> Reminder? {
@@ -66,7 +70,7 @@ protocol ReminderListInterface {
     // TODO: Change the loading to local peristed data
     func loadReminders() async {
         for index in 0..<10  {
-            add(reminder: Reminder(title: "Sample Reminder \(index+1)", state: .todo, updatedAt: Date()))
+            add(reminder: Reminder(reminderListId: reminderCategoryId, title: "Sample Reminder \(index+1)", state: .todo, updatedAt: Date()))
         }
     }
 }
