@@ -10,15 +10,15 @@ import SwiftUI
 struct ReminderListContentView<Factory: BaseReminderViewModelFactory>: View {
     let publisher = NotificationCenter.default.publisher(for: LocalNotificationManager.shared.notificationName)
     @State var viewModel: ReminderListViewModel
-    
+
     init(factory: Factory) {
         _viewModel = State(wrappedValue: factory.createModel())
     }
-    
+
     var body: some View {
         NavigationStack {
             ReminderListView(viewModel: viewModel)
-                .navigationTitle("Reminders")
+                .navigationTitle(viewModel.categoryName)
                 .fontWeight(.light)
                 .onReceive(publisher) { data in
                     guard let notification = data.object as? UNNotificationContent else {
@@ -32,5 +32,6 @@ struct ReminderListContentView<Factory: BaseReminderViewModelFactory>: View {
 }
 
 #Preview {
-    ReminderListContentView(factory: ReminderListViewModelFactory(reminderCategoryId: UUID()))
+    ReminderListContentView(factory: ReminderListViewModelFactory(reminderCategoryId: UUID(),
+                                                                  categoryName: "Reminders"))
 }

@@ -10,7 +10,7 @@ import Foundation
 enum ReminderState: String, Codable {
     case todo = "TODO"
     case completed = "COMPLETED"
-    
+
     func stateIcon() -> String {
         var iconName = "circle.dotted"
         switch self {
@@ -44,4 +44,3 @@ struct AlarmDetail: Identifiable, Hashable, Codable {
     var createdAt: Date = Date()
     var updatedAt: Date = Date()
 }
-

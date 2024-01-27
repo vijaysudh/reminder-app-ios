@@ -15,7 +15,7 @@ struct AddCategoryListView: View {
 
     var body: some View {
         ListCategoryDetailView(title: $title,
-                               imageIndex: $imageIndex, 
+                               imageIndex: $imageIndex,
                                header: "New List",
                                action: addCategory)
     }
@@ -25,10 +25,14 @@ private extension AddCategoryListView {
     func addCategory() {
         let image = CategoryIcons(rawValue: imageIndex) ?? CategoryIcons.list
         let category = CategoryList(iconName: image.stringValue(), name: title)
-        
-        let _ = print(image.stringValue())
-        
-        viewModel.add(categoryList: category)
+
+        Task {
+            do {
+                try await viewModel.add(categoryList: category)
+            } catch let error {
+                print("Error adding category: " + error.localizedDescription)
+            }
+        }
         dismiss()
     }
 }

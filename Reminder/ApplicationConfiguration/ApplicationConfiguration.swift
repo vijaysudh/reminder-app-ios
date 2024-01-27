@@ -9,41 +9,52 @@ import Foundation
 
 protocol ApplicationConfig {
     var environment: AppSystem { get }
+    var reminderRepository: any ReminderRepositoryInterface { get }
+    var categoryListRepository: any CategoryListRepositoryInterface { get }
 }
 
 enum AppSystem: String {
-    case mock = "mock"
-    case test  = "test"
-    case production = "production"
+    case mock
+    case test
+    case production
 }
 
-fileprivate struct MockAppConfig: ApplicationConfig {
+private struct MockAppConfig: ApplicationConfig {
     var environment: AppSystem = .mock
-    // TODO: Add additional parameters required for the App for Factory Injection
+    // TODO: Need to change to MOCK
+
+    var reminderRepository: any ReminderRepositoryInterface = CoreDataReminderManager(alarmDetailManager:
+                                                                                        CoreDataAlarmDetailManager())
+    var categoryListRepository: any CategoryListRepositoryInterface = CoreDataCategoryListManager()
 }
 
-fileprivate struct TestAppConfig: ApplicationConfig {
+private struct TestAppConfig: ApplicationConfig {
     var environment: AppSystem = .test
-    // TODO: Add additional parameters required for the App for Factory Injection
+    // TODO: Need to change to In Memory
+    var reminderRepository: any ReminderRepositoryInterface = CoreDataReminderManager(alarmDetailManager:
+                                                                                        CoreDataAlarmDetailManager())
+    var categoryListRepository: any CategoryListRepositoryInterface = CoreDataCategoryListManager()
 }
 
-fileprivate struct ProductionAppConfig: ApplicationConfig {
+private struct ProductionAppConfig: ApplicationConfig {
     var environment: AppSystem = .production
-    // TODO: Add additional parameters required for the App for Factory Injection
+    var reminderRepository: any ReminderRepositoryInterface = CoreDataReminderManager(alarmDetailManager:
+                                                                                        CoreDataAlarmDetailManager())
+    var categoryListRepository: any CategoryListRepositoryInterface = CoreDataCategoryListManager()
 }
 
 class ApplicationConfiguration {
     static let sharedInstance = ApplicationConfiguration()
-    
+
     func getApplicationConfig() -> ApplicationConfig {
-        guard let infoDictionary = Bundle.main.infoDictionary, 
+        guard let infoDictionary = Bundle.main.infoDictionary,
                 let appConfig = infoDictionary["ApplicationConfiguration"] as? String,
               let appSystem = AppSystem(rawValue: appConfig)
         else {
             return MockAppConfig()
         }
 
-        switch(appSystem) {
+        switch appSystem {
         case .mock:
             return MockAppConfig()
         case .test:
@@ -53,4 +64,3 @@ class ApplicationConfiguration {
         }
     }
 }
-

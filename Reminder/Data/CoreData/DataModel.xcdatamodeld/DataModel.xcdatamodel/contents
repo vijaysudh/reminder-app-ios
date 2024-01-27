@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23C71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="AlarmDetailEntity" representedClassName=".AlarmDetailEntity" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="reminder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ReminderEntity" inverseName="alarmDetail" inverseEntity="ReminderEntity"/>
+    </entity>
+    <entity name="CategoryListEntity" representedClassName=".CategoryListEntity" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="iconName" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="ReminderEntity" representedClassName=".ReminderEntity" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isAlarmRequired" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="reminderId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="reminderListId" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="remindOnDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="state" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="alarmDetail" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AlarmDetailEntity" inverseName="reminder" inverseEntity="AlarmDetailEntity"/>
+    </entity>
+</model>

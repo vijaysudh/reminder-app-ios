@@ -10,11 +10,11 @@ import SwiftUI
 struct CategoryIconView: View {
     @Binding var imageIndex: Int
     @State private var selectedState: [Int: Bool] = [Int: Bool]()
-    
+
     var isSelected: Bool = false
     let gridItemLayout = [GridItem(.adaptive(minimum: 50))]
     let images = CategoryIcons.allCases.sorted(by: { $0.rawValue < $1.rawValue })
-    
+
     var body: some View {
         VStack {
             LazyVGrid(columns: gridItemLayout, spacing: 20) {
@@ -28,7 +28,8 @@ struct CategoryIconView: View {
                                       imageName: imageName.stringValue(),
                                       backgroundColor: Color(uiColor: .systemGray5),
                                       iconColor: Color.black,
-                                      iconSize: 35)
+                                      iconSize: 35,
+                                      hasShadow: true)
                     }
                 }
             }.padding()
@@ -41,7 +42,7 @@ struct CategoryIconView: View {
     }
 }
 
-struct CategoryIconView_Preview: PreviewProvider {
+struct CategoryIconViewPreview: PreviewProvider {
     static var previews: some View {
         @State var imageIndex = 0
         CategoryIconView(imageIndex: $imageIndex)

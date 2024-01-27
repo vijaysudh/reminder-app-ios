@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AddButton<Destination>: View where Destination : View {
+struct AddButton<Destination>: View where Destination: View {
     @State var isSheetDisplayed: Bool = false
     var title: String
     let destination: Destination
@@ -22,12 +22,12 @@ struct AddButton<Destination>: View where Destination : View {
         self.iconName = iconName
         self.isSheetDisplayed = isSheetDisplayed
     }
-    
+
     var body: some View {
         Button(action: {
             isSheetDisplayed.toggle()
         }, label: {
-            Image(systemName:iconName)
+            Image(systemName: iconName)
                 .resizable()
                 .font(Font.system(size: 60, weight: .light))
                 .frame(width: 25, height: 25)
@@ -44,9 +44,12 @@ struct AddButton<Destination>: View where Destination : View {
     }
 }
 
-struct AddButton_Previews: PreviewProvider {
+struct AddButtonPreviews: PreviewProvider {
     static var previews: some View {
-        let view = { AddReminderView().environment(ReminderListViewModelFactory(reminderCategoryId: UUID()).createModel()) }
+        let view = {
+            AddReminderView().environment(ReminderListViewModelFactory(reminderCategoryId: UUID(),
+                                                                       categoryName: "Reminders").createModel())
+        }
         AddButton(title: "Add Reminder", iconName: "plus.circle", destination: view)
     }
 }

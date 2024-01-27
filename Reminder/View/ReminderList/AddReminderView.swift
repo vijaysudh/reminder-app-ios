@@ -15,7 +15,7 @@ struct AddReminderView: View {
     @State private var isAlarmRequired: Bool = false
     @FocusState private var focus: ReminderFocusedField?
     @Environment(\.dismiss) var dismiss
-    
+
     var body: some View {
         ReminderDetailView(title: $title,
                            note: $note,
@@ -30,11 +30,20 @@ private extension AddReminderView {
     func addReminder() {
         let note = !note.isEmpty ? note : nil
         let date = isAlarmRequired ? date : nil
-        let reminder = Reminder(reminderListId: viewModel.reminderCategoryId, title: title, state: .todo, note: note, remindOnDate: date, isAlarmRequired: isAlarmRequired, updatedAt: Date())
+        let reminder = Reminder(reminderListId: viewModel.reminderCategoryId,
+                                title: title,
+                                state: .todo,
+                                note: note,
+                                remindOnDate: date,
+                                isAlarmRequired: isAlarmRequired,
+                                updatedAt: Date())
         viewModel.add(reminder: reminder)
         if let date = date, isAlarmRequired {
             let userInfo = ["reminderId": reminder.id.uuidString]
-            LocalNotificationManager.shared.scheduleNotification(title: title, body: note, remindAt: date, userInfo: userInfo) { result in
+            LocalNotificationManager.shared.scheduleNotification(title: title,
+                                                                 body: note,
+                                                                 remindAt: date,
+                                                                 userInfo: userInfo) { result in
                 switch result {
                 case .success(let notificationId):
                     DispatchQueue.main.async {
@@ -42,7 +51,9 @@ private extension AddReminderView {
                         self.viewModel.updateAlarmDetail(forId: reminder.id, withUpdate: alarmDetail)
                     }
                 case .failure(let error):
-                    let _ = print("editReminder - error: ", error.localizedDescription)
+#if DEBUG
+                    print("addReminder - error: ", error.localizedDescription)
+#endif
                 }
             }
         }
@@ -50,8 +61,7 @@ private extension AddReminderView {
     }
 }
 
-
-
 #Preview {
-    AddReminderView().environment(ReminderListViewModelFactory(reminderCategoryId: UUID()).createModel())
+    AddReminderView().environment(ReminderListViewModelFactory(reminderCategoryId: UUID(),
+                                                               categoryName: "Reminders").createModel())
 }

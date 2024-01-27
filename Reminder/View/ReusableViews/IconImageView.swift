@@ -13,7 +13,8 @@ struct IconImageView: View {
     var backgroundColor: Color
     var iconColor: Color
     var iconSize: CGFloat
-    
+    var hasShadow: Bool
+
     var body: some View {
         Image(systemName: imageName)
             .resizable()
@@ -30,17 +31,23 @@ struct IconImageView: View {
                     .frame(width: iconSize+10, height: iconSize+10)
             )
             .font(Font.system(size: iconSize, weight: .light))
-            .shadow(color: !isSelected ? backgroundColor : Color(uiColor: .darkGray).opacity(0), radius: 2)
+            .shadow(color: !isSelected ? backgroundColor.opacity(hasShadow ? 1 : 0) :
+                        Color(uiColor: .darkGray).opacity(0), radius: 2)
     }
 }
 
-struct IconImageView_Preview: PreviewProvider {
+struct IconImageViewPreview: PreviewProvider {
     static var previews: some View {
         let isSelected: Bool = false
         let imageName = CategoryIcons.food.stringValue()
         let backgroundColor = Color(uiColor: .systemGray5)
         let iconColor = Color.black
         let size: CGFloat = 60
-        IconImageView(isSelected: isSelected, imageName: imageName, backgroundColor: backgroundColor, iconColor: iconColor, iconSize: size)
+        IconImageView(isSelected: isSelected,
+                      imageName: imageName,
+                      backgroundColor: backgroundColor,
+                      iconColor: iconColor,
+                      iconSize: size,
+                      hasShadow: true)
     }
 }

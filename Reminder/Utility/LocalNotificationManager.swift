@@ -41,12 +41,12 @@ class LocalNotificationManager: NSObject, UNUserNotificationCenterDelegate {
     static let shared = LocalNotificationManager()
     let notificationCenter = UNUserNotificationCenter.current()
     let notificationName = Notification.Name("ReminderAlarm")
-    
+
     private override init() {
         super.init()
         notificationCenter.delegate = self
     }
-    
+
     func requestPermissionFromUser() {
         notificationCenter.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
             if granted {
@@ -56,7 +56,7 @@ class LocalNotificationManager: NSObject, UNUserNotificationCenterDelegate {
             }
         }
     }
-    
+
     func checkAuthorization(completion: @escaping (Result<Bool, Error>) -> Void) {
         authorizationStatus { result in
             switch result {
@@ -71,18 +71,24 @@ class LocalNotificationManager: NSObject, UNUserNotificationCenterDelegate {
             }
         }
     }
-        
-    func scheduleNotification(title: String, body: String?, remindAt: Date, userInfo: [String: String], completion: @escaping (Result<UUID, Error>) -> Void) {
+
+    func scheduleNotification(title: String, body: String?,
+                              remindAt: Date,
+                              userInfo: [String: String],
+                              completion: @escaping (Result<UUID, Error>) -> Void) {
         authorizationStatus { result in
             switch result {
             case .success(let status):
                 if status == .authorized {
-                    self.sendNotification(title: title, body: body, remindAt: remindAt, userInfo: userInfo) { notificationResult in
+                    self.sendNotification(title: title,
+                                          body: body,
+                                          remindAt: remindAt,
+                                          userInfo: userInfo) { notificationResult in
                         switch notificationResult {
-                            case .success(let notificationId): 
-                                completion(.success(notificationId))
-                            case .failure(let error): 
-                                completion(.failure(error))
+                        case .success(let notificationId):
+                            completion(.success(notificationId))
+                        case .failure(let error):
+                            completion(.failure(error))
                         }
                     }
                 }
@@ -92,28 +98,29 @@ class LocalNotificationManager: NSObject, UNUserNotificationCenterDelegate {
             }
         }
     }
-    
+
     func clearDeliveredNotifications() {
         notificationCenter.removeAllDeliveredNotifications()
     }
-    
+
     /** Handle notification when the app is in background */
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response:
-    UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
         let content = response.notification.request.content
         // handle the notification here
-        NotificationCenter.default.post(name:notificationName , object: content)
+        NotificationCenter.default.post(name: notificationName, object: content)
     }
-    
+
     /** Handle notification when the app is in foreground */
     func userNotificationCenter(_ center: UNUserNotificationCenter,
-             willPresent notification: UNNotification,
-             withCompletionHandler completionHandler:
-                @escaping (UNNotificationPresentationOptions) -> Void) {
-       
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler:
+                                @escaping (UNNotificationPresentationOptions) -> Void) {
+
         let content = notification.request.content
         // handle the notification here
-        NotificationCenter.default.post(name:notificationName , object: content)
+        NotificationCenter.default.post(name: notificationName, object: content)
     }
 }
 
@@ -142,23 +149,25 @@ private extension LocalNotificationManager {
             }
         }
     }
-    
-    private func sendNotification(title: String, body: String?, remindAt: Date, userInfo: [String: String], completion: @escaping (Result<UUID, Error>) -> Void) {
+
+    private func sendNotification(title: String, body: String?,
+                                  remindAt: Date, userInfo: [String: String],
+                                  completion: @escaping (Result<UUID, Error>) -> Void) {
         let timeInterval = remindAt - Date()
         guard timeInterval > 0 else {
             completion(.failure(LocalNotificationError.invalidDate(date: remindAt)))
             return
         }
-        
+
         // TODO: Remove temp code once Local Peristance storage has been added
         notificationCenter.removeAllPendingNotificationRequests()
-        
+
         let content = UNMutableNotificationContent()
         content.categoryIdentifier = "Reminder"
         content.sound = UNNotificationSound.default
         content.title = title
         content.userInfo = userInfo
-        
+
         if let body = body {
             content.body = body
         }
@@ -180,5 +189,3 @@ private extension LocalNotificationManager {
         }
     }
 }
-
-

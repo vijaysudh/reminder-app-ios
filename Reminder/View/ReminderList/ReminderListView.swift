@@ -10,7 +10,7 @@ import SwiftUI
 struct ReminderListView: View {
     @State var viewModel: ReminderListViewModel
     @State private var isAddReminderSheetDisplayed = false
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             List(viewModel.getAllReminders()) { reminder in
@@ -21,7 +21,7 @@ struct ReminderListView: View {
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
             Spacer()
             HStack(alignment: .top) {
-                AddButton(isSheetDisplayed: isAddReminderSheetDisplayed, title: "Add Reminder", iconName: "plus.circle") {
+                AddButton(isSheetDisplayed: isAddReminderSheetDisplayed, title: "Add Item", iconName: "plus.circle") {
                     AddReminderView()
                         .environment(viewModel)
                 }
@@ -34,8 +34,9 @@ struct ReminderListView: View {
     }
 }
 
-struct ReminderListView_Previews: PreviewProvider {
+struct ReminderListViewPreviews: PreviewProvider {
     static var previews: some View {
-        ReminderListView(viewModel: ReminderListViewModelFactory(reminderCategoryId: UUID()).createModel())
+        ReminderListView(viewModel: ReminderListViewModelFactory(reminderCategoryId: UUID(),
+                                                                 categoryName: "Reminders").createModel())
     }
 }

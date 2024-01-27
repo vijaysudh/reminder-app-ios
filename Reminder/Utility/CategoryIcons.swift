@@ -25,43 +25,26 @@ enum CategoryIcons: Int, CaseIterable {
     case baseball = 15
     case moon = 16
     case sum = 17
-    
+
+    private static let icons: [CategoryIcons: String] = [.list: "list.bullet",
+                                                         .cart: "cart.fill",
+                                                         .food: "carrot.fill",
+                                                         .bookmark: "bookmark.fill",
+                                                         .contact: "person.fill",
+                                                         .music: "music.note",
+                                                         .birthday: "birthday.cake.fill",
+                                                         .dining: "fork.knife",
+                                                         .camping: "tent.fill",
+                                                         .cricket: "cricket.ball.fill",
+                                                         .volleyball: "volleyball.fill",
+                                                         .tennis: "tennisball.fill",
+                                                         .football: "football.fill",
+                                                         .basketball: "basketball.fill",
+                                                         .baseball: "baseball.fill",
+                                                         .moon: "moon.fill",
+                                                         .sum: "sun.max.fill"]
+
     func stringValue() -> String {
-        switch(self) {
-        case .list:
-            return "list.bullet"
-        case .cart:
-            return "cart.fill"
-        case .food:
-            return "carrot.fill"
-        case .bookmark:
-            return "bookmark.fill"
-        case .contact:
-            return "person.fill"
-        case .music:
-            return "music.note"
-        case .birthday:
-            return "birthday.cake.fill"
-        case .dining:
-            return "fork.knife"
-        case .camping:
-            return "tent.fill"
-        case .cricket:
-            return "cricket.ball.fill"
-        case .volleyball:
-            return "volleyball.fill"
-        case .tennis:
-            return "tennisball.fill"
-        case .football:
-            return "football.fill"
-        case .basketball:
-            return "basketball.fill"
-        case .baseball:
-            return "baseball.fill"
-        case .moon:
-            return "moon.fill"
-        case .sum:
-            return "sun.max.fill"
-        }
+        return CategoryIcons.icons[self] ?? ""
     }
 }

@@ -12,15 +12,13 @@ struct ReminderTextField: View {
     @Binding var isFocused: Bool
     @Binding var isCompleted: Bool
     @FocusState private var focusState: Bool
-    
     var placeholderText: String
     var textColor: Color
     var fontSize: Float
-    
     let onAppear: (() -> Void)?
     let onSubmit: (() -> Void)?
     let lineLimit = 1
-    
+
     var body: some View {
         TextField(placeholderText, text: $text, axis: .vertical)
             .font(.system(size: CGFloat(fontSize)))
@@ -33,7 +31,7 @@ struct ReminderTextField: View {
             .onAppear(perform: {
                 (onAppear ?? {})()
             })
-            .onSubmit() {
+            .onSubmit {
                 (onSubmit ?? {})()
             }
             .onChange(of: focusState) { _, newValue in
@@ -45,12 +43,12 @@ struct ReminderTextField: View {
                 }
             }
             .onChange(of: isFocused) { _, newValue in
-                focusState = isFocused
+                focusState = newValue
             }
     }
 }
 
-struct ReminderTextField_Preview: PreviewProvider {
+struct ReminderTextFieldPreview: PreviewProvider {
     static var previews: some View {
         @State var text: String = "Sample text"
         @State var isFocused: Bool = false
@@ -59,7 +57,7 @@ struct ReminderTextField_Preview: PreviewProvider {
                           isFocused: $isFocused,
                           isCompleted: $isCompleted,
                           placeholderText: "",
-                          textColor: Color.black, 
+                          textColor: Color.black,
                           fontSize: 17.0,
                           onAppear: {},
                           onSubmit: {})

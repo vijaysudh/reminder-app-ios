@@ -15,9 +15,9 @@ struct EditReminderView: View {
     @State private var isAlarmRequired: Bool = false
     @FocusState private var focus: ReminderFocusedField?
     @Environment(\.dismiss) var dismiss
-    
+
     let reminderId: UUID
-    
+
     var body: some View {
         ReminderDetailView(title: $title,
                            note: $note,
@@ -40,7 +40,7 @@ extension EditReminderView {
         isAlarmRequired = reminder.remindOnDate != nil ? true : false
         date = reminder.remindOnDate ?? Date()
     }
-    
+
     func editReminder() {
         guard let reminder = viewModel.getReminder(id: reminderId) else {
             return
@@ -55,7 +55,10 @@ extension EditReminderView {
         viewModel.updateReminder(forId: reminderId, withUpdate: updatedReminder)
         if isAlarmRequired {
             let userInfo = ["reminderId": reminder.id.uuidString]
-            LocalNotificationManager.shared.scheduleNotification(title: title, body: note, remindAt: date, userInfo: userInfo) { result in
+            LocalNotificationManager.shared.scheduleNotification(title: title,
+                                                                 body: note,
+                                                                 remindAt: date,
+                                                                 userInfo: userInfo) { result in
                 switch result {
                 case .success(let notificationId):
                     DispatchQueue.main.async {
@@ -63,7 +66,9 @@ extension EditReminderView {
                         self.viewModel.updateAlarmDetail(forId: updatedReminder.id, withUpdate: alarmDetail)
                     }
                 case .failure(let error):
-                    let _ = print("editReminder - error: ", error.localizedDescription)
+#if DEBUG
+                    print("editReminder - error: ", error.localizedDescription)
+#endif
                 }
             }
         }
@@ -71,9 +76,11 @@ extension EditReminderView {
     }
 }
 
-struct EditReminderView_Preview: PreviewProvider {
+struct EditReminderViewPreview: PreviewProvider {
     static let isAlarmRequired = false
     static var previews: some View {
-        EditReminderView(reminderId: UUID()).environment(ReminderListViewModelFactory(reminderCategoryId: UUID()).createModel())
+        EditReminderView(reminderId: UUID()).environment(
+            ReminderListViewModelFactory(reminderCategoryId: UUID(),
+                                         categoryName: "Reminders").createModel())
     }
 }

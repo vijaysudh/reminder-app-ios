@@ -10,7 +10,7 @@ import SwiftUI
 struct ColorSelectorView: View {
     var backgroundColor: Color
     var iconSize: CGFloat
-    
+
     var body: some View {
         Image(systemName: "")
             .resizable()

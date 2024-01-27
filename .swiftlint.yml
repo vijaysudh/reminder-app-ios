@@ -1,0 +1,18 @@
+included:
+  - "Reminder"
+  - "ReminderTests"
+  - "ReminderUITests"
+
+excluded:
+  - "Carthage"
+  - "Pods"
+
+line_length:
+  warning: 120
+  error: 160
+  
+type_name:
+  allowed_symbols: "_"
+  min_length: 1
+  
+

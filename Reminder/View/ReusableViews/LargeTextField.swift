@@ -12,7 +12,7 @@ struct LargeTextField: View {
     @Binding var text: String
     let placeholder: String
     let onSubmit: (() -> Void)?
-    
+
     var body: some View {
         TextField(placeholder, text: $text)
             .padding([.leading], 10)
@@ -43,7 +43,7 @@ struct LargeTextField: View {
     }
 }
 
-struct LargeTextField_Preview: PreviewProvider {
+struct LargeTextFieldPreview: PreviewProvider {
     static var previews: some View {
         @State var text: String = ""
         LargeTextField(text: $text, placeholder: "List name", onSubmit: {})

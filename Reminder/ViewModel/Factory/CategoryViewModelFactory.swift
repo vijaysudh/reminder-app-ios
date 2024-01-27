@@ -14,9 +14,13 @@ protocol BaseCategoryViewModelFactory {
 
 class CategoryViewModelFactory: BaseCategoryViewModelFactory {
     typealias ViewModelType = CategoryViewModel
-    
+
     func createModel() -> CategoryViewModel {
-       print("CategoryViewModelFactory: " + ApplicationConfiguration.sharedInstance.getApplicationConfig().environment.rawValue)
-        return CategoryViewModel()
+       print("CategoryViewModelFactory: " + ApplicationConfiguration
+        .sharedInstance.getApplicationConfig()
+        .environment.rawValue)
+        let categoryListRepository = ApplicationConfiguration
+            .sharedInstance.getApplicationConfig().categoryListRepository
+        return CategoryViewModel(categoryListRepository: categoryListRepository)
     }
 }

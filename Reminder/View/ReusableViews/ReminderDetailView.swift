@@ -22,10 +22,10 @@ struct ReminderDetailView: View {
     @Binding var isAlarmRequired: Bool
     @State var shouldDisplayDatePicker: Bool = false
     @State private var showAlert = false
-    
+
     let header: String
     let action: () -> Void
-    
+
     var body: some View {
         NavigationStack {
             Form {
@@ -45,7 +45,7 @@ struct ReminderDetailView: View {
                         .textInputAutocapitalization(.never)
                         .disableAutocorrection(true)
                         .focused($focus, equals: .note)
-                    
+
                     Toggle("Set Alarm", isOn: $isAlarmRequired)
                         .onChange(of: isAlarmRequired) {_, newValue in
                             if newValue {
@@ -64,7 +64,7 @@ struct ReminderDetailView: View {
                             Text("Notification settings needs to be turned on to set reminders")
                                 .fontWeight(.light)
                         }
-                        
+
                     if shouldDisplayDatePicker && isAlarmRequired {
                         DatePicker(selection: $date,
                                    label: {
@@ -110,15 +110,15 @@ private extension ReminderDetailView {
     func checkLocalNotificationAuthorization() {
         LocalNotificationManager.shared.checkAuthorization { result in
             switch result {
-            case .success(_):
+            case .success:
                 shouldDisplayDatePicker = true
-            case .failure(_):
+            case .failure:
                 shouldDisplayDatePicker = false
                 showAlert = true
             }
         }
     }
-    
+
     func openAppSettings() {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
         if UIApplication.shared.canOpenURL(settingsURL) {
@@ -133,13 +133,13 @@ private extension ReminderDetailView {
     }
 }
 
-struct ReminderDetailView_Preview: PreviewProvider {
+struct ReminderDetailViewPreview: PreviewProvider {
     static var previews: some View {
         @State var title: String = "Reminder title"
         @State var note: String = "Some note"
         @State var date: Date = Date()
         @State var isAlarmRequired: Bool = false
-        
+
         ReminderDetailView(title: $title,
                            note: $note,
                            date: $date,
